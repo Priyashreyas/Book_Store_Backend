@@ -70,8 +70,10 @@ public class DeleteBookController {
     
 
 
+    
+    @PreAuthorize("hasRole(T(com.bookstore.model.db.auth.Role).ROLE_ADMIN)")
     @DeleteMapping
-    public ResponseEntity<DeletaBookResponse> deleteBook(@RequestParam(value = "ID") Optional<Long> id) {
+    public ResponseEntity<DeletaBookResponse> deleteBook(@RequestParam(value = "id") Optional<Long> id) {
         //log.debug("Username = {}", username.orElse("null"));
         if (!id.isPresent()) {
             log.info("id is null.");
@@ -85,7 +87,7 @@ public class DeleteBookController {
             deleteService.deleteBook(id.get());
             return ResponseEntity.ok()
                     .body(DeletaBookResponse.builder()
-                            .message(String.format("User with username %s deleted successfully.", id.get()))
+                            .message(String.format("Book with id %s deleted successfully.", id.get()))
                             .build());
         } catch (RuntimeException e) {
             log.error("Unexpected exception: ", e);
