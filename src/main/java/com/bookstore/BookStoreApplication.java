@@ -1,6 +1,7 @@
 package com.bookstore;
 
 import com.bookstore.model.db.book.Book;
+import com.bookstore.model.db.order.Order;
 import com.bookstore.repo.BookRepository;
 import com.bookstore.utils.InitDataLoader;
 import lombok.extern.slf4j.Slf4j;
