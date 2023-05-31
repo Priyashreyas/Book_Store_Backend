@@ -1,5 +1,4 @@
 package com.bookstore.controller.api;
-
 import com.bookstore.model.db.book.Book;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -14,9 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class BookResponse {
-    private String message;
-    
+public class DeletaBookResponse {
     private List<Book> books;
-    private Book book;
+    private String message;
 }

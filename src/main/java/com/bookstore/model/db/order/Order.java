@@ -1,5 +1,4 @@
 package com.bookstore.model.db.order;
-
 import com.bookstore.model.db.Name;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +10,7 @@ import java.util.List;
 @Document
 @Builder
 public class Order {
-    private long id;
+    private long id;    
     private String title;
     private float price;
     private float quantity;
