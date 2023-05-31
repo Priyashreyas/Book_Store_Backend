@@ -1,5 +1,4 @@
 package com.bookstore.controller;
-
 import com.bookstore.controller.api.BookRequest;
 import com.bookstore.controller.api.BookResponse;
 import com.bookstore.model.db.book.Book;

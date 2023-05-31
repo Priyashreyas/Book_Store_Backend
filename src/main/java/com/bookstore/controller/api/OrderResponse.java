@@ -1,6 +1,6 @@
 package com.bookstore.controller.api;
 
-import com.bookstore.model.db.book.Book;
+import com.bookstore.model.db.order.Order;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,9 +14,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class BookResponse {
+public class OrderResponse {
     private String message;
-    
-    private List<Book> books;
-    private Book book;
+    private List<Order> books;
+    private Order order;
 }
