@@ -9,6 +9,7 @@ import java.util.List;
 @AllArgsConstructor
 public class OrderService {
     private final OrderRepository repository;
+    
     public List<Order> getAllOrders() {
         return repository.findAll();
     }

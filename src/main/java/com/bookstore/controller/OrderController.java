@@ -1,4 +1,5 @@
 package com.bookstore.controller;
+
 import com.bookstore.controller.api.OrderRequest;
 import com.bookstore.controller.api.OrderResponse;
 import com.bookstore.model.db.order.Order;
@@ -21,35 +22,27 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/v1/cart")
+@RequestMapping("/api/v1/order")
 @AllArgsConstructor
 @Slf4j
-public class CreateOrderController {
+public class OrderController {
     private final OrderService orderService;
 
-    @PostMapping
-    public ResponseEntity<OrderResponse> saveOrder(@RequestBody OrderRequest request) {
-        log.info("Request#####: {}", request);
-        final Order order = request.getOrder();
-        log.info("Order = {}", order);
-        if (order == null) {
-            log.info("the order is null.");
-            return ResponseEntity.badRequest().body(OrderResponse.builder()
-                    .message("Order is empty.")
-                    .build());
-        }
-        log.info("Saving Order with id {}.", order.getId());
-
-        if (!orderService.saveOrder(request.getOrder())) {
-            ResponseEntity.internalServerError()
+    @GetMapping
+    public ResponseEntity<OrderResponse> fetchSomeOrders(@RequestParam(value = "count") Optional<Integer> count) {
+        if (!count.isPresent() || count.get() < 1) {
+            return ResponseEntity.badRequest()
                     .body(OrderResponse.builder()
-                            .message(String.format("Could not save the Order with id %s.", order.getId()))
+                            .message("Parameter count must have a value > 0.")
                             .build());
         }
 
-        return ResponseEntity.ok()
-                .body(OrderResponse.builder()
-                        .message(String.format("Order with id %s saved successfully.", order.getId()))
-                        .build());
+        List<Order> orders = orderService.getAllOrders();
+        log.info("Returning {} orders.", count.orElse(orders.size()));
+        return ResponseEntity.ok(OrderResponse.builder()
+                .books(count.map(integer -> orders.subList(0, integer))
+                        .orElse(Collections.emptyList()))
+                .build());
     }
+
 }
