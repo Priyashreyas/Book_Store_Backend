@@ -86,18 +86,21 @@ public class InitDataLoader {
         final Map<String, Integer> genreBookCount = new HashMap<>();
         final Map<String, Integer> authorBookCount = new HashMap<>();
         final Set<Long> bookIdSet = new HashSet<>();
+        final Set<String> bookTitleSet = new HashSet<>();
 
         return books.stream()
                 .filter(book -> SUPPORTED_GENRES.contains(book.getGenre()) &&
                         !book.getTitle().toLowerCase().contains("f**k") &&
                         genreBookCount.getOrDefault(book.getGenre(), 0) < MAX_BOOKS_PER_GENRE &&
                         authorBookCount.getOrDefault(book.getAuthor().toString(), 0) < MAX_BOOKS_PER_AUTHOR &&
-                        !bookIdSet.contains(book.getId()))
+                        !bookIdSet.contains(book.getId()) &&
+                        !bookTitleSet.contains(book.getTitle().trim().toLowerCase()))
                 .peek(book -> {
                     genreBookCount.put(book.getGenre(), genreBookCount.getOrDefault(book.getGenre(), 0) + 1);
                     final String author = book.getAuthor().toString();
                     authorBookCount.put(author, genreBookCount.getOrDefault(author, 0) + 1);
                     bookIdSet.add(book.getId());
+                    bookTitleSet.add(book.getTitle().trim().toLowerCase());
                 })
                 .collect(Collectors.toList());
     }
@@ -121,6 +124,8 @@ public class InitDataLoader {
                                 .genre(row.category.trim())
                                 .description(generateBookDescription())
                                 .isNew(generateIsNew())
+                                .isTrending(generateIsTrending())
+                                .isFeatured(generateIsFeatured())
                                 .build();
                     } catch (AuthorNotFoundException | PriceNotFoundException e) {
                         log.debug("Encountered exception while processing the book {}: {}", row, e.getMessage());
@@ -132,6 +137,14 @@ public class InitDataLoader {
                 })
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
+    }
+
+    private boolean generateIsFeatured() {
+        return Math.round(Math.random() * 10) % 2 == 0;
+    }
+
+    private boolean generateIsTrending() {
+        return Math.round(Math.random() * 10) % 2 == 0;
     }
 
     private boolean generateIsNew() {
