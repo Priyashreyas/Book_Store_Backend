@@ -23,5 +23,7 @@ public class Book {
     private String currency;
     private String description;
     private boolean isNew;
+    private boolean isFeatured;
+    private boolean isTrending;
     private String review;
 }

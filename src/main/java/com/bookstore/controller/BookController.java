@@ -28,7 +28,8 @@ public class BookController {
     private final BookService bookService;
 
     @GetMapping
-    public ResponseEntity<BookResponse> fetchSomeBooks(@RequestParam(value = "count") Optional<Integer> count) {
+    public ResponseEntity<BookResponse> fetchSomeBooks(@RequestParam(value = "count") Optional<Integer> count,
+                                                       @RequestParam(value = "type") Optional<String> type) {
         if (!count.isPresent() || count.get() < 1) {
             return ResponseEntity.badRequest()
                     .body(BookResponse.builder()
@@ -36,7 +37,21 @@ public class BookController {
                             .build());
         }
 
-        List<Book> books = bookService.getAllBooks();
+        List<Book> books = bookService.getAllBooks()
+                .stream()
+                .filter(book -> {
+                    if (type.isPresent()) {
+                        switch (type.get().toLowerCase()) {
+                            case "featured":
+                                return book.isFeatured();
+                            case "trending":
+                                return book.isTrending();
+                        }
+                    }
+
+                    return true;
+                }).collect(Collectors.toList());
+
         log.info("Returning {} books.", count.orElse(books.size()));
         return ResponseEntity.ok(BookResponse.builder()
                 .books(count.map(integer -> books.subList(0, integer))
