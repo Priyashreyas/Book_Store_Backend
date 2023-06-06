@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
+
 
 @Data
 @Document
@@ -19,7 +19,7 @@ public class Order {
     private Name author;
     private String genre;
     private float stars;
-    private List<String> imgs;
+    private String imgs;
     private String format;
     private String currency;
     private String description;
