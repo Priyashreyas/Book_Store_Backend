@@ -30,17 +30,19 @@ public class OrderController {
 
     @GetMapping
     public ResponseEntity<OrderResponse> fetchSomeOrders(@RequestParam(value = "count") Optional<Integer> count) {
-        if (!count.isPresent() || count.get() < 1) {
+    if (!count.isPresent() || count.get() < 1) {
             return ResponseEntity.badRequest()
                     .body(OrderResponse.builder()
                             .message("Parameter count must have a value > 0.")
                             .build());
         }
 
-        List<Order> orders = orderService.getAllOrders();
+        List<Order> orders = orderService.getAllOrders()
+        .stream().collect(Collectors.toList());
+
         log.info("Returning {} orders.", count.orElse(orders.size()));
         return ResponseEntity.ok(OrderResponse.builder()
-                .books(count.map(integer -> orders.subList(0, integer))
+                .books(count.map(integer -> orders.subList(0, orders.size()))
                         .orElse(Collections.emptyList()))
                 .build());
     }
